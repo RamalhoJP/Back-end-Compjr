@@ -1,0 +1,415 @@
+{
+  "openapi": "3.0.0",
+  "info":{
+    "title": "Projeto Trainee",
+    "description": "Capacitação Back-End Comp Junior - Sistema de realização de posts/ cadastro e autenticação de usuários. Feito por: João Pedro Ramalho de Sousa",
+    "version": "1.0.0",
+    "contact": {
+      "email": "joaopedroramalho249@gmail.com"
+    }
+  },
+  "servers": [{
+    "url": "http://localhost:3000",
+    "description" : "API"
+    }
+  ],
+  "paths": {
+    "/post" : {
+      "post": {
+        "summary": "Realiza um post",
+        "description": "Rota responsável por realizar posts",
+        "tags": ["Posts"],
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                  "$ref": "#/components/schemas/Post"
+                },
+                "examples": {
+                  "post": {
+                    "value": {
+                      "title": "Oi Marco!",
+                      "description": "Oi Marco!"
+                    }
+                  }
+                }
+              } 
+            }
+          },
+          "responses": {
+            "400": {
+              "description" : "Já existe uma publicação de mesmo nome"
+            },
+            "200": {
+              "description" : "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type" :"object",
+                    "$ref":"#/components/schemas/Post"
+                  }
+                }
+              }
+            }
+          }
+        },
+      "get": {
+          "description": "Retorna todos os posts feitos",
+          "summary": "Retorna todos os posts feitos",
+          "tags": ["Posts"],
+          "responses": {
+            "200": {
+              "description" : "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type" :"object",
+                    "$ref":"#/components/schemas/Post"
+                  }
+                }
+              }
+            }
+          }
+        }
+    },
+    "/post/{postSlug}": {
+      "get": {
+        "description": "Retorna post com base no seu slug",
+        "summary": "Retorna post com base no seu slug",
+        "tags": ["Posts"],
+        "parameters": [
+          {
+            "name": "postSlug",
+            "in": "path",
+            "description": "Slug do post",
+            "required": true
+          }
+        ],
+        "responses": {
+          "400": {
+            "description" : "Não existe esse post"
+          },
+          "200": {
+            "description" : "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type" :"object",
+                  "$ref":"#/components/schemas/Post"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/post/{postId}": {
+      "put":{
+        "summary": "Edita um post",
+        "description": "Rota responsável por editar um post pelo id",
+        "tags": ["Posts"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "Id do post",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                  "$ref": "#/components/schemas/Post"
+                },
+                "examples": {
+                  "post": {
+                    "value": {
+                      "title": "Oi Marco!",
+                      "description": "Oi Marco!"
+                    }
+                  }
+                }
+              } 
+            }
+          },
+          "responses": {
+            "400": {
+              "description" : "Não existe publicação com este id"
+            },
+            "200": {
+              "description" : "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type" :"object",
+                    "$ref":"#/components/schemas/Post"
+                  }
+                }
+              }
+            }
+          }
+      },
+      "delete":{
+        "summary": "Deleta um post",
+        "description": "Rota responsável por deletar um post pelo id",
+        "tags": ["Posts"],
+        "security": [{"bearerAuth": []}],
+        "parameters": [
+          {
+            "name": "postId",
+            "in": "path",
+            "description": "Id do post",
+            "required": true
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                  "$ref": "#/components/schemas/Post"
+                }
+              } 
+            }
+          },
+          "responses": {
+            "400": {
+              "description" : "Não existe publicação com este id"
+            },
+            "200": {
+              "description" : "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type" :"object",
+                    "$ref":"#/components/schemas/Post"
+                  }
+                }
+              }
+            }
+          }
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "summary": "Rota responsável por cadastrar um novo usuario",
+        "description": "Rota responsável por cadastrar um novo usuario",
+        "tags": ["Users"],
+        "security": [{"bearerAuth": []}],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                  "$ref": "#/components/schemas/User"
+                },
+                "examples": {
+                  "post": {
+                    "value": {
+                      "email": "compjr@gmail.com",
+                      "password": "compjunior2023"
+                    }
+                  }
+                }
+              } 
+            }
+          },
+          "responses": {
+            "400": {
+              "description" : "Já existe este email"
+            },
+            "200": {
+              "description" : "OK",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "type" :"object",
+                    "$ref":"#/components/schemas/User"
+                  }
+                }
+              }
+            }
+          }
+        }
+    },
+    "/auth/login": {
+        "post": {
+          "summary": "Rota responsável por realizar o login",
+          "description": "Verifica se o email e senha informados batem e se estão cadastrados. Caso dê certo, retorna um token de acesso",
+          "tags": ["Users"],
+          "security": [{"bearerAuth": []}],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                    "$ref": "#/components/schemas/User"
+                  },
+                  "examples": {
+                    "post": {
+                      "value": {
+                        "email": "compjr@gmail.com",
+                        "password": "compjunior2023"
+                      }
+                    }
+                  }
+                } 
+              }
+            },
+            "responses": {
+              "404": {
+                "description" : "Usuário não encontrado"
+              },
+              "200": {
+                "description" : "OK",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type" :"object",
+                      "$ref":"#/components/schemas/User"
+                    }
+                  }
+                }
+              }
+            }
+          }
+    },
+    "/auth/forgot-password": {
+      "post": {
+        "summary": "Rota responsável por gerar um token para redefinir a senha",
+          "description": "Rota responsável por gerar um token para redefinir a senha",
+          "tags": ["Users"],
+          "security": [{"bearerAuth": []}],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                    "$ref": "#/components/schemas/UserForgotPassword"
+                  },
+                  "examples": {
+                    "post": {
+                      "value": {
+                        "email": "compjr@gmail.com"
+                      }
+                    }
+                  }
+                } 
+              }
+            },
+            "responses": {
+              "404": {
+                "description" : "Usuário não encontrado"
+              },
+              "200": {
+                "description" : "OK",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type" : "object",
+                      "$ref":"#/components/schemas/UserForgotPassword"
+                    }
+                  }
+                }
+              }
+            }
+      }
+    },
+    "/auth/reset-password": {
+      "post":{
+        "summary": "Rota responsável por redefinir a senha",
+          "description": "Rota responsável por redefinir a senha",
+          "tags": ["Users"],
+          "security": [{"bearerAuth": []}],
+          "requestBody": {
+            "content": {
+              "application/json": {
+                "schema": {
+                    "$ref": "#/components/schemas/UserResetPassword"
+                  },
+                  "examples": {
+                    "post": {
+                      "value": {
+                        "email": "compjr@gmail.com",
+                        "token": "abcd2i3ufbeh23e2idedjo32",
+                        "newPassword": "compjrsensacional"
+                      }
+                    }
+                  }
+                } 
+              }
+            },
+            "responses": {
+              "404": {
+                "description" : "Usuário não encontrado"
+              },
+              "200": {
+                "description" : "OK",
+                "content": {
+                  "application/json": {
+                    "schema": {
+                      "type" : "object",
+                      "$ref":"#/components/schemas/UserResetPassword"
+                    }
+                  }
+                }
+              }
+            }
+      }
+    }
+    },
+    "components": {
+      "schemas": {
+        "Post": {
+          "type": "object",
+          "properties": {
+            "title": {
+              "type": "string"
+            },
+            "description": {
+              "type": "string"
+            }
+          }
+        },
+        "User": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "password": {
+              "type": "string"
+            }
+          }
+        },
+        "UserForgotPassword": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            }
+          }
+        },
+        "UserResetPassword": {
+          "type": "object",
+          "properties": {
+            "email": {
+              "type": "string"
+            },
+            "token": {
+              "type": "string"
+            },
+            "newPassword": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "securitySchemas": {
+        "bearerAuth": {
+          "type": "http",
+          "scheme": "bearer",
+          "bearerFormat": "JWT"
+        }
+      }
+    }
+  }
