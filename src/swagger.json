@@ -197,7 +197,6 @@
         "summary": "Rota responsável por cadastrar um novo usuario",
         "description": "Rota responsável por cadastrar um novo usuario",
         "tags": ["Users"],
-        "security": [{"bearerAuth": []}],
         "requestBody": {
           "content": {
             "application/json": {
@@ -238,7 +237,6 @@
           "summary": "Rota responsável por realizar o login",
           "description": "Verifica se o email e senha informados batem e se estão cadastrados. Caso dê certo, retorna um token de acesso",
           "tags": ["Users"],
-          "security": [{"bearerAuth": []}],
           "requestBody": {
             "content": {
               "application/json": {
@@ -279,7 +277,6 @@
         "summary": "Rota responsável por gerar um token para redefinir a senha",
           "description": "Rota responsável por gerar um token para redefinir a senha",
           "tags": ["Users"],
-          "security": [{"bearerAuth": []}],
           "requestBody": {
             "content": {
               "application/json": {
@@ -319,7 +316,6 @@
         "summary": "Rota responsável por redefinir a senha",
           "description": "Rota responsável por redefinir a senha",
           "tags": ["Users"],
-          "security": [{"bearerAuth": []}],
           "requestBody": {
             "content": {
               "application/json": {
